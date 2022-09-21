@@ -76,7 +76,7 @@ class UserRepository {
 
 ## Архитектура программы
 
-![Architecture](docs/DALLE-HOODIE.jpg)
+![Architecture](docs/dalleHoodie.jpg)
 
 
 
