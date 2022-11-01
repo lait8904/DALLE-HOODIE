@@ -1,6 +1,6 @@
 package org.dalleHoodie.model;
 
-class Category {
+public class Category {
     private int categoryId;
     private String categoryName;
 
