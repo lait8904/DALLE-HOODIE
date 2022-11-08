@@ -1,19 +1,25 @@
 package org.dalleHoodie;
 
+import org.dalleHoodie.repository.CategoriesRepository;
+import org.dalleHoodie.repository.ItemsRepository;
 import org.dalleHoodie.services.CategoriesService;
 import org.dalleHoodie.services.CategoryService;
 import org.dalleHoodie.services.HelpService;
+import org.dalleHoodie.services.ItemService;
 
 import java.util.Scanner;
 import java.util.Arrays;
 
 public class DalleHoodieApplication {
     public static void main(String[] args) {
-        new CommandList();
-        new ApplicationContext();
-        HelpService helpService = new HelpService();
-        CategoriesService categoriesService = new CategoriesService();
-        CategoryService categoryService = new CategoryService();
+        //new CommandList();
+        ApplicationContext applicationContext = new ApplicationContext();
+        HelpService helpService = new HelpService(applicationContext);
+        CategoriesRepository categoriesRepository = new CategoriesRepository();
+        ItemsRepository itemsRepository = new ItemsRepository();
+        CategoriesService categoriesService = new CategoriesService(applicationContext, categoriesRepository);
+        CategoryService categoryService = new CategoryService(applicationContext, itemsRepository);
+        ItemService itemService = new ItemService(applicationContext, itemsRepository);
 
         boolean loop = true;
         Scanner in = new Scanner(System.in);
@@ -32,6 +38,9 @@ public class DalleHoodieApplication {
                     break;
                 case CommandList.CATEGORY:
                     System.out.print(categoryService.perform(cmd_args));
+                    break;
+                case CommandList.ITEM:
+                    System.out.print(itemService.perform(cmd_args));
                     break;
                 case CommandList.EXIT:
                     loop = false;

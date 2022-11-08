@@ -8,6 +8,7 @@ public class User {
     private String password;
     private String email;
     private String address;
+    private String login;
     private Timestamp createdOn;
     private Timestamp lastLogin;
 
@@ -73,5 +74,13 @@ public class User {
 
     public void setLastLogin(Timestamp lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 }

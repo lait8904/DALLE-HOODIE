@@ -1,5 +1,6 @@
 package org.dalleHoodie.services;
 
+import org.dalleHoodie.ApplicationContext;
 import org.dalleHoodie.IService;
 
 public class HelpService implements IService {
@@ -15,11 +16,26 @@ public class HelpService implements IService {
             "orders  // вывести список проведенных ордеров" + '\n' +
             "order-item ID_item // добавить в ордер позицию" + '\n' +
             "exit  // выйти" + '\n';
+
+    private ApplicationContext applicationContext;
+
+    public HelpService(ApplicationContext applicationContext) {
+        this.setApplicationContext(applicationContext);
+    }
+
     @Override
     public String perform(String[] param) {
         if (param.length != 0)
             return "Error\n";
 
         return referenceInformation;
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 }
