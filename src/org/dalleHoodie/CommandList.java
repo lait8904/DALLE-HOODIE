@@ -11,5 +11,6 @@ public class CommandList {
     public static final String ORDER = "order";
     public static final String ORDERS = "orders";
     public static final String ORDER_ITEMS = "order-items";
+    public static final String USER = "user";
     public static final String EXIT = "exit";
 }

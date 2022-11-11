@@ -5,23 +5,22 @@ import org.dalleHoodie.model.User;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import org.dalleHoodie.Constants;
 
 public class UserRepository {
 
-    private final int SAME_LOGIN = 1;
-
     public List<User> users = new ArrayList<>();
 
-    public int createUser(String login,
-                    String firstName,
-                    String lastName,
-                    String address,
-                    String password,
-                    String email) {
+    public Constants createUser(String login,
+                                String password,
+                                String firstName,
+                                String lastName,
+                                String address,
+                                String email) {
 
         for (User user : users)
             if (user.getLogin().equals(login))
-                return SAME_LOGIN;
+                return Constants.SAME_LOGIN;
         User user = new User();
         user.setLogin(login);
         user.setFirstName(firstName);
@@ -33,13 +32,21 @@ public class UserRepository {
         user.setLastLogin(new Timestamp(System.currentTimeMillis()));
         user.setUserId(users.size());
         users.add(user);
-        return 0;
+        return Constants.SUCCESS;
     }
 
-    public User getUser(int userId) {
+    public User findById(int userId) {
         for (User user : users)
             if (user.getUserId() == userId)
                 return user;
+        return null;
+    }
+
+    public User findByLogin(String login) {
+        for (User user : users)
+            if (user.getLogin().equals(login)) {
+                return user;
+            }
         return null;
     }
 

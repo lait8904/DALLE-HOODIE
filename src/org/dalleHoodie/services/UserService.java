@@ -2,6 +2,7 @@ package org.dalleHoodie.services;
 
 import org.dalleHoodie.ApplicationContext;
 import org.dalleHoodie.IService;
+import org.dalleHoodie.model.User;
 import org.dalleHoodie.repository.UserRepository;
 
 import java.util.Arrays;
@@ -12,43 +13,28 @@ public class UserService implements IService {
 
     public UserService(ApplicationContext applicationContext,
                            UserRepository userRepository) {
-        this.setApplicationContext(applicationContext);
-        this.userRepository = userRepository;
-    }
-
-
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+        this.userRepository = userRepository;
     }
 
     @Override
     public String perform(String[] param) {
-        if (param.length == 0)
+        if (param.length != 1)
             return "Error (Number of arguments)\n";
-        String[] args = Arrays.copyOfRange(param, 1, param.length);
-        switch(param[0]) {
-            case "register":
-                return doRegister(args);
-            case "login":
-                return doLogin(args);
-            case "profile":
-                return doProfile(args);
-            default:
-                return "Unknown command\n";
+        try {
+            int userId = Integer.parseInt(param[0]);
+            User user = userRepository.findById(userId);
+            if (user == null)
+                return "No such user\n";
+            String out =    "Login: " + user.getLogin() + "\n" +
+                            "Id: " + user.getUserId() + "\n" +
+                            "First name: " + user.getFirstName() + "\n" +
+                            "Last name: " + user.getLastName() + "\n" +
+                            "E-mail: " + user.getEmail() + "\n" +
+                            "Address: " + user.getAddress() + "\n";
+            return out;
+        } catch (NumberFormatException e) {
+            return "Error (Unknown parameter)\n";
         }
-    }
-
-    private String doRegister(String[] param) {
-        return null;
-    }
-    private String doLogin(String[] param) {
-        return null;
-    }
-    private String doProfile(String[] param) {
-        return null;
     }
 }

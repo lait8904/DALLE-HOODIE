@@ -7,7 +7,7 @@ public class HelpService implements IService {
     private final String referenceInformation =
             "help // вывести справку и список комманд" + '\n' +
             "register LOGIN PASSWORD // создать нового пользователя" + '\n' +
-            "login LOGIN PASWORD // авторизоваться в системе. " + '\n' +
+            "login LOGIN PASSWORD // авторизоваться в системе. " + '\n' +
             "categories    // выводит список категорий" + '\n' +
             "category CATEGORY_ID // выводит список позиций в категории" + '\n' +
             "item ITEM_ID // выводит более подробную инфу по позиции" + '\n' +
