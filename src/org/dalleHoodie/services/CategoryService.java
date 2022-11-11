@@ -16,7 +16,7 @@ public class CategoryService implements IService {
 
     public CategoryService(ApplicationContext applicationContext,
                            ItemsRepository itemsRepository) {
-        this.setApplicationContext(applicationContext);
+        this.applicationContext = applicationContext;
         this.itemsRepository = itemsRepository;
     }
 
@@ -37,13 +37,5 @@ public class CategoryService implements IService {
         out = out.substring(0, out.length() - 2) + "\n";
 
         return out;
-    }
-
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
     }
 }

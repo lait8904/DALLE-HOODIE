@@ -11,7 +11,7 @@ public class ItemService implements IService {
 
     public ItemService(ApplicationContext applicationContext,
                            ItemsRepository itemsRepository) {
-        this.setApplicationContext(applicationContext);
+        this.applicationContext = applicationContext;
         this.itemsRepository = itemsRepository;
     }
     @Override
@@ -32,13 +32,5 @@ public class ItemService implements IService {
         } catch (NumberFormatException e) {
             return "Error (Unknown parameter)\n";
         }
-    }
-
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
     }
 }

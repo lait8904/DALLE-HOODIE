@@ -20,7 +20,7 @@ public class HelpService implements IService {
     private ApplicationContext applicationContext;
 
     public HelpService(ApplicationContext applicationContext) {
-        this.setApplicationContext(applicationContext);
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -29,13 +29,5 @@ public class HelpService implements IService {
             return "Error\n";
 
         return referenceInformation;
-    }
-
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
     }
 }

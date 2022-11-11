@@ -5,10 +5,14 @@ import org.dalleHoodie.model.User;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import org.dalleHoodie.Constants;
 
 public class UserRepository {
 
+    public enum Constants {
+    SUCCESS,
+    SAME_LOGIN
+}
+    
     public List<User> users = new ArrayList<>();
 
     public Constants createUser(String login,

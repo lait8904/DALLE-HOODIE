@@ -1,7 +1,6 @@
 package org.dalleHoodie.services;
 
 import org.dalleHoodie.ApplicationContext;
-import org.dalleHoodie.Constants;
 import org.dalleHoodie.IService;
 import org.dalleHoodie.repository.UserRepository;
 
@@ -19,7 +18,7 @@ public class RegisterService implements IService {
     public String perform(String[] param) {
         if (param.length != 2)
             return "Error (Number of parameters)\n";
-        Constants error = userRepository.createUser(param[0], param[1],
+        UserRepository.Constants error = userRepository.createUser(param[0], param[1],
                 null, null, null, null);
         switch (error) {
             case SUCCESS:

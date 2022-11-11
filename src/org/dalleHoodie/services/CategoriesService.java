@@ -17,7 +17,7 @@ public class CategoriesService implements IService {
     //Добавляем объекты в список
     public CategoriesService(ApplicationContext applicationContext,
                              CategoriesRepository categoriesRepository) {
-        this.setApplicationContext(applicationContext);
+        this.applicationContext = applicationContext;
         this.categoriesRepository = categoriesRepository;
     }
 
@@ -37,13 +37,5 @@ public class CategoriesService implements IService {
         out = out.substring(0, out.length() - 2) + "\n";
 
         return out;
-    }
-
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
     }
 }
