@@ -1,26 +1,26 @@
-package org.dalleHoodie.services;
+package main.java.dalleHoodie.services;
 
-import org.dalleHoodie.ApplicationContext;
-import org.dalleHoodie.IService;
-import org.dalleHoodie.model.User;
-import org.dalleHoodie.repository.UserRepository;
+import main.java.dalleHoodie.ApplicationContext;
+import main.java.dalleHoodie.IService;
+import main.java.dalleHoodie.model.User;
+import main.java.dalleHoodie.repository.UsersRepository;
 
 public class LoginService implements IService {
 
     private ApplicationContext applicationContext;
-    private UserRepository userRepository;
+    private UsersRepository usersRepository;
     public LoginService(ApplicationContext applicationContext,
-                           UserRepository userRepository) {
+                           UsersRepository usersRepository) {
         this.applicationContext = applicationContext;
-        this.userRepository = userRepository;
+        this.usersRepository = usersRepository;
     }
     @Override
     public String perform(String[] param) {
         if (param.length != 2)
             return "Error (Number of parameters)\n";
-        User user = userRepository.findByLogin(param[0]);
+        User user = usersRepository.findByLogin(param[0]);
         if (user == null)
-            return "No user with such login";
+            return "No user with such login\n";
         if (user.getPassword().equals(param[1])) {
             applicationContext.setUser(user);
             return "Success!\n";

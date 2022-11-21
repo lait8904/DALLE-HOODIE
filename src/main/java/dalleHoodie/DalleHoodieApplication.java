@@ -1,9 +1,11 @@
-package org.dalleHoodie;
+package main.java.dalleHoodie;
 
-import org.dalleHoodie.repository.CategoriesRepository;
-import org.dalleHoodie.repository.ItemsRepository;
-import org.dalleHoodie.repository.UserRepository;
-import org.dalleHoodie.services.*;
+import main.java.dalleHoodie.model.OrderItem;
+import main.java.dalleHoodie.repository.CategoriesRepository;
+import main.java.dalleHoodie.repository.OrdersRepository;
+import main.java.dalleHoodie.repository.UsersRepository;
+import main.java.dalleHoodie.services.*;
+import main.java.dalleHoodie.repository.ItemsRepository;
 
 import java.util.Scanner;
 import java.util.Arrays;
@@ -15,13 +17,17 @@ public class DalleHoodieApplication {
         HelpService helpService = new HelpService(applicationContext);
         CategoriesRepository categoriesRepository = new CategoriesRepository();
         ItemsRepository itemsRepository = new ItemsRepository();
-        UserRepository userRepository = new UserRepository();
+        UsersRepository usersRepository = new UsersRepository();
+        OrdersRepository ordersRepository = new OrdersRepository();
         CategoriesService categoriesService = new CategoriesService(applicationContext, categoriesRepository);
         CategoryService categoryService = new CategoryService(applicationContext, itemsRepository);
         ItemService itemService = new ItemService(applicationContext, itemsRepository);
-        UserService userService = new UserService(applicationContext, userRepository);
-        RegisterService registerService = new RegisterService(applicationContext, userRepository);
-        LoginService loginService = new LoginService(applicationContext, userRepository);
+        ProfileService profileService = new ProfileService(applicationContext, usersRepository);
+        RegisterService registerService = new RegisterService(applicationContext, usersRepository);
+        LoginService loginService = new LoginService(applicationContext, usersRepository);
+        OrderService orderService = new OrderService(applicationContext, ordersRepository, itemsRepository);
+        OrdersService ordersService = new OrdersService(applicationContext, ordersRepository, itemsRepository);
+        OrderItemService orderItemService = new OrderItemService(applicationContext, ordersRepository, itemsRepository);
 
         boolean loop = true;
         Scanner in = new Scanner(System.in);
@@ -44,19 +50,28 @@ public class DalleHoodieApplication {
                 case CommandList.ITEM:
                     System.out.print(itemService.perform(cmd_args));
                     break;
-                case CommandList.USER:
-                    System.out.print(userService.perform(cmd_args));
+                case CommandList.PROFILE:
+                    System.out.print(profileService.perform(cmd_args));
                     break;
                 case CommandList.REGISTER:
                     System.out.print(registerService.perform(cmd_args));
                     break;
                 case CommandList.LOGIN:
-                    System.out.print(loginService.perform((cmd_args)));
+                    System.out.print(loginService.perform(cmd_args));
+                    break;
+                case CommandList.ORDER:
+                    System.out.print(orderService.perform(cmd_args));
+                    break;
+                case CommandList.ORDERS:
+                    System.out.print(ordersService.perform(cmd_args));
+                    break;
+                case CommandList.ORDER_ITEMS:
+                    System.out.print(orderItemService.perform(cmd_args));
                     break;
                 case CommandList.EXIT:
                     loop = false;
                     break;
-                default:
+                          default:
                     System.out.println("Unknown command");
             }
         }

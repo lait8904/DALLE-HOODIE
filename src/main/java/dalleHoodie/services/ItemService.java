@@ -1,9 +1,9 @@
-package org.dalleHoodie.services;
+package main.java.dalleHoodie.services;
 
-import org.dalleHoodie.ApplicationContext;
-import org.dalleHoodie.IService;
-import org.dalleHoodie.model.Item;
-import org.dalleHoodie.repository.ItemsRepository;
+import main.java.dalleHoodie.model.Item;
+import main.java.dalleHoodie.ApplicationContext;
+import main.java.dalleHoodie.IService;
+import main.java.dalleHoodie.repository.ItemsRepository;
 
 public class ItemService implements IService {
     private ApplicationContext applicationContext;
@@ -18,7 +18,6 @@ public class ItemService implements IService {
     public String perform(String[] param) {
         if (param.length != 1)
             return "Error (Number of parameters)\n";
-        final int POISON = -666;
         try {
             int itemId = Integer.parseInt(param[0]);
             Item item = itemsRepository.getItem(itemId);

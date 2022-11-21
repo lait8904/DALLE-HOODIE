@@ -1,19 +1,21 @@
-package org.dalleHoodie.repository;
+package main.java.dalleHoodie.repository;
 
-import org.dalleHoodie.model.User;
+import main.java.dalleHoodie.model.User;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserRepository {
+public class UsersRepository extends DataBase{
 
     public enum Constants {
     SUCCESS,
     SAME_LOGIN
 }
-    
-    public List<User> users = new ArrayList<>();
+
+    public UsersRepository() {
+        super();
+    }
 
     public Constants createUser(String login,
                                 String password,

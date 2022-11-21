@@ -1,16 +1,16 @@
-package org.dalleHoodie.services;
+package main.java.dalleHoodie.services;
 
-import org.dalleHoodie.ApplicationContext;
-import org.dalleHoodie.IService;
-import org.dalleHoodie.repository.UserRepository;
+import main.java.dalleHoodie.repository.UsersRepository;
+import main.java.dalleHoodie.ApplicationContext;
+import main.java.dalleHoodie.IService;
 
 public class RegisterService implements IService {
     private ApplicationContext applicationContext;
-    private UserRepository userRepository;
+    private UsersRepository usersRepository;
     public RegisterService(ApplicationContext applicationContext,
-                           UserRepository userRepository) {
+                           UsersRepository usersRepository) {
         this.applicationContext = applicationContext;
-        this.userRepository = userRepository;
+        this.usersRepository = usersRepository;
     }
 
     @Override
@@ -18,7 +18,7 @@ public class RegisterService implements IService {
     public String perform(String[] param) {
         if (param.length != 2)
             return "Error (Number of parameters)\n";
-        UserRepository.Constants error = userRepository.createUser(param[0], param[1],
+        UsersRepository.Constants error = usersRepository.createUser(param[0], param[1],
                 null, null, null, null);
         switch (error) {
             case SUCCESS:
