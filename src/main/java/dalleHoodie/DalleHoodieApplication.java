@@ -1,18 +1,17 @@
 package main.java.dalleHoodie;
 
-import main.java.dalleHoodie.model.OrderItem;
-import main.java.dalleHoodie.repository.CategoriesRepository;
-import main.java.dalleHoodie.repository.OrdersRepository;
-import main.java.dalleHoodie.repository.UsersRepository;
+import main.java.dalleHoodie.repository.*;
 import main.java.dalleHoodie.services.*;
-import main.java.dalleHoodie.repository.ItemsRepository;
+import java.sql.*;
 
 import java.util.Scanner;
 import java.util.Arrays;
 
 public class DalleHoodieApplication {
     public static void main(String[] args) {
-        //new CommandList();
+
+        DBConnectionProvider dbConnectionProvider = new DBConnectionProvider();
+
         ApplicationContext applicationContext = new ApplicationContext();
         HelpService helpService = new HelpService(applicationContext);
         CategoriesRepository categoriesRepository = new CategoriesRepository();
