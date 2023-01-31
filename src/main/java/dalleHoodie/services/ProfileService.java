@@ -21,7 +21,7 @@ public class ProfileService implements IService {
             return "Error (Number of arguments)\n";
         User user = applicationContext.getUser();
         if (user != null) {
-            String out =    "Login: " + user.getLogin() + "\n" +
+            String out =    "Email: " + user.getEmail() + "\n" +
                     "Id: " + user.getUserId() + "\n" +
                     "First name: " + user.getFirstName() + "\n" +
                     "Last name: " + user.getLastName() + "\n" +

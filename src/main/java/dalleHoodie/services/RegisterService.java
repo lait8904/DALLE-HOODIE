@@ -19,7 +19,7 @@ public class RegisterService implements IService {
         if (param.length != 2)
             return "Error (Number of parameters)\n";
         UsersRepository.Constants error = usersRepository.createUser(param[0], param[1],
-                null, null, null, null);
+                null, null, null);
         switch (error) {
             case SUCCESS:
                 return "Success!\n";

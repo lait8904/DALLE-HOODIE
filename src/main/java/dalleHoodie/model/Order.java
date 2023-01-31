@@ -3,16 +3,15 @@ package main.java.dalleHoodie.model;
 import java.sql.Timestamp;
 
 public class Order {
-    private static int previousOrderId = 1;
-    private static int orderId;
+    private int orderId;
     private int userId;
     private String condition;
     private Timestamp orderDate;
     private int price;
 
-    public Order() {
-        previousOrderId++;
-        orderId = previousOrderId;
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     public int getOrderId() {

@@ -32,7 +32,7 @@ public class OrdersService implements IService {
         User user = applicationContext.getUser();
         if (user == null)
             return "Authorize firstly!\n";
-        List<Order> usersOrders = ordersRepository.getOrders(user.getUserId());
+        List<Order> usersOrders = ordersRepository.getOrders(user.getUserId(), null);
 
         if (usersOrders.size() == 0)
             ordersRepository.createOrder(user.getUserId());
@@ -50,9 +50,7 @@ public class OrdersService implements IService {
                 out += "\tNo items in order\n";
             for (Integer itemId : itemIds) {
                 Item item = itemsRepository.getItem(itemId);
-                if (item != null)
-                    out += "\t" + item.getItemName() +
-                            "(" + item.getItemId() + ")\n";
+                out += "\t" + item.getItemName() + "(" + item.getItemId() + ")\n";
             }
         }
 

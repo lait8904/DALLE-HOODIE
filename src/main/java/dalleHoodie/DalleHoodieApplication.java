@@ -13,11 +13,15 @@ public class DalleHoodieApplication {
         DBConnectionProvider dbConnectionProvider = new DBConnectionProvider();
 
         ApplicationContext applicationContext = new ApplicationContext();
+        CategoriesRepository categoriesRepository = new CategoriesRepository(
+                dbConnectionProvider.getConnection());
+        ItemsRepository itemsRepository = new ItemsRepository(
+                dbConnectionProvider.getConnection());
+        UsersRepository usersRepository = new UsersRepository(
+                dbConnectionProvider.getConnection());
+        OrdersRepository ordersRepository = new OrdersRepository(
+                dbConnectionProvider.getConnection());
         HelpService helpService = new HelpService(applicationContext);
-        CategoriesRepository categoriesRepository = new CategoriesRepository();
-        ItemsRepository itemsRepository = new ItemsRepository();
-        UsersRepository usersRepository = new UsersRepository();
-        OrdersRepository ordersRepository = new OrdersRepository();
         CategoriesService categoriesService = new CategoriesService(applicationContext, categoriesRepository);
         CategoryService categoryService = new CategoryService(applicationContext, itemsRepository);
         ItemService itemService = new ItemService(applicationContext, itemsRepository);

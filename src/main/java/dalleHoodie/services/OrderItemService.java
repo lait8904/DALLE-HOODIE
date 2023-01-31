@@ -38,15 +38,13 @@ public class OrderItemService implements IService {
             if (item == null)
                 return "No item with such Id\n";
 
-            List<Order> UsersOrders = ordersRepository.getOrders(user.getUserId());
-            Order draftOrder = null;
-            for (Order order : UsersOrders)
-                if (order.getCondition().equals(OrdersRepository.ConditionList.DRAFT)) {
-                    draftOrder = order;
-                    break;
-                }
-            if (draftOrder == null)
+            List<Order> draftOrders = ordersRepository.getOrders(
+                    user.getUserId(), OrdersRepository.ConditionList.DRAFT);
+                Order draftOrder = null;
+            if (draftOrders.size() == 0)
                 draftOrder = ordersRepository.createOrder(user.getUserId());
+            else
+                draftOrder = draftOrders.get(0);
             if (draftOrder == null)
                 return "Error (Authorize?)\n";
 

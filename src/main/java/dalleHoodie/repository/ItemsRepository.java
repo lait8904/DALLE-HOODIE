@@ -5,40 +5,62 @@ import main.java.dalleHoodie.model.Category;
 import main.java.dalleHoodie.model.Order;
 import main.java.dalleHoodie.model.OrderItem;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemsRepository extends DataBase{
+public class ItemsRepository{
+    private Connection connection = null;
 
-    public ItemsRepository() {
-        super();
+    public ItemsRepository(Connection connection) {
+        this.connection = connection;
     }
 
-    public List<Item> getItems(String categoryName) {
+    public List<Item> getItems(int categoryId) {
         List<Item> itemsInCategory = new ArrayList<Item>();
-        final int POISON = -666;
-        int categoryId = POISON;
-        for (Category category : categories)
-            if (category.getCategoryName().equals(categoryName)) {
-                categoryId = category.getCategoryId();
-                break;
-            }
-
-        if (categoryId == POISON)
-            return itemsInCategory;
-
-        for (Item item : items)
-            if (item.getCategoryId() == categoryId)
+        String selectItemsSql = "select * from items " +
+                "where category_id = " + categoryId;
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(selectItemsSql);
+            while(resultSet.next()) {
+                Item item = new Item();
+                this.setItem(item, resultSet);
                 itemsInCategory.add(item);
-
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return itemsInCategory;
     }
 
     public Item getItem(int itemId) {
-        for (Item item : items)
-            if (item.getItemId() == itemId)
-                return item;
-        return null;
+        Item item = new Item();
+        String selectItemSql = "select * from items " +
+                "where item_id = " + itemId;
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(selectItemSql);
+            if (resultSet.next()) {
+                this.setItem(item, resultSet);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return item;
+    }
+
+    private void setItem(Item item, ResultSet resultSet) throws SQLException {
+        item.setItemId(resultSet.getInt("item_id"));
+        item.setCategoryId(resultSet.getInt("category_id"));
+        item.setSizeId(resultSet.getInt("size_id"));
+        item.setPictureId(resultSet.getInt("picture_id"));
+        item.setColorId(resultSet.getInt("color_id"));
+        item.setItemName(resultSet.getString("item_name"));
+        item.setPrice(resultSet.getInt("price"));
     }
 
 }

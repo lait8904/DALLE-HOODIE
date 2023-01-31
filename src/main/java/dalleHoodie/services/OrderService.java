@@ -32,15 +32,13 @@ public class OrderService implements IService {
         User user = applicationContext.getUser();
         if (user == null)
             return "Authorize firstly!\n";
-        List<Order> UsersOrders = ordersRepository.getOrders(user.getUserId());
+        List<Order> draftOrders = ordersRepository.getOrders(
+                    user.getUserId(), OrdersRepository.ConditionList.DRAFT);
         Order draftOrder = null;
-        for (Order order : UsersOrders)
-            if (order.getCondition().equals(OrdersRepository.ConditionList.DRAFT)) {
-                draftOrder = order;
-                break;
-            }
-        if (draftOrder == null)
+        if (draftOrders.size() == 0)
             draftOrder = ordersRepository.createOrder(user.getUserId());
+        else
+            draftOrder = draftOrders.get(0);
         if (draftOrder == null)
             return "Error (Authorize?)\n";
 
@@ -49,8 +47,7 @@ public class OrderService implements IService {
             return "No items in bag yet\n";
         for (Integer itemId : itemIds) {
             Item item = itemsRepository.getItem(itemId);
-            if (item != null)
-                out += "\t" + item.getItemName() + "\n";
+            out += "\t" + item.getItemName() + "\n";
         }
         return out;
 

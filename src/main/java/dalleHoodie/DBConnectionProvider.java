@@ -6,9 +6,12 @@ public class DBConnectionProvider {
     private final String USERNAME = "postgres";
     private final String PASSWORD = "postgres";
 
-    public DBConnectionProvider() {
-        System.out.println("Testing connection to PostgreSQL JDBC");
+    private Connection connection = null;
+    public Connection getConnection() {
+        return connection;
+    }
 
+    public DBConnectionProvider(){
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
@@ -17,10 +20,8 @@ public class DBConnectionProvider {
             return;
         }
 
-        Connection connection = null;
-
         try {
-            connection = DriverManager
+            this.connection = DriverManager
                     .getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException e) {
             System.out.println("Connection Failed");
@@ -28,7 +29,7 @@ public class DBConnectionProvider {
             return;
         }
 
-        if (connection != null) {
+        if (this.connection != null) {
             System.out.println("You successfully connected to database now");
         } else {
             System.out.println("Failed to make connection to database");

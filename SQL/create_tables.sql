@@ -41,20 +41,20 @@ CREATE TABLE items (
 
 CREATE TABLE users (
 	user_id serial PRIMARY KEY,
-	first_name VARCHAR (50) NOT NULL,
-	last_name VARCHAR (50) NOT NULL,
-	password VARCHAR (50) NOT NULL,
-	email VARCHAR (255) UNIQUE NOT NULL,
-	address VARCHAR (255) NOT NULL,
-	created_on TIMESTAMP NOT NULL,
-	last_login TIMESTAMP 
+	first_name VARCHAR (50),
+	last_name VARCHAR (50),
+	password VARCHAR (50),
+	email VARCHAR (255) UNIQUE,
+	address VARCHAR (255),
+	created_on TIMESTAMP,
+	last_login TIMESTAMP
 );
 
 CREATE TABLE orders (
 	order_id serial PRIMARY KEY,
 	user_id INT,
 	FOREIGN KEY (user_id) REFERENCES users(user_id),
-	condition VARCHAR(20) NOT NULL DEFAULT 'in bag',
+	condition VARCHAR(20) NOT NULL DEFAULT 'draft',
 	order_date TIMESTAMP NOT NULL,
 	price INT NOT NULL
 );
@@ -66,3 +66,5 @@ CREATE TABLE order_items (
 	FOREIGN KEY (order_id) REFERENCES orders(order_id),
 	FOREIGN KEY (item_id) REFERENCES items(item_id)
 );
+
+SELECT * FROM order_items;
