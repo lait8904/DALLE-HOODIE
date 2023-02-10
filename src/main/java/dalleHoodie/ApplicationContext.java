@@ -1,6 +1,6 @@
-package main.java.dalleHoodie;
+package dalleHoodie;
 
-import main.java.dalleHoodie.model.User;
+import dalleHoodie.model.User;
 
 public class ApplicationContext {
     private User user = null;

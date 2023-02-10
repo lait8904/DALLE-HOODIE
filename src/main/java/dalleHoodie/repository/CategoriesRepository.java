@@ -1,6 +1,6 @@
-package main.java.dalleHoodie.repository;
+package dalleHoodie.repository;
 
-import main.java.dalleHoodie.model.Category;
+import dalleHoodie.model.Category;
 
 import java.sql.*;
 import java.util.ArrayList;

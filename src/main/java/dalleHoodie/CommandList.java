@@ -1,4 +1,4 @@
-package main.java.dalleHoodie;
+package dalleHoodie;
 
 public class CommandList {
     public static final String HELP = "help";

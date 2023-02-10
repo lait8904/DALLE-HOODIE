@@ -41,7 +41,7 @@
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
                             <mainClass>
-                                main.java.dalleHoodie.DalleHoodieApplication
+                                dalleHoodie.DalleHoodieApplication
                             </mainClass>
                         </manifest>
                     </archive>

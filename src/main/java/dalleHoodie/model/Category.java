@@ -1,4 +1,4 @@
-package main.java.dalleHoodie.model;
+package dalleHoodie.model;
 
 public class Category {
     private int categoryId;

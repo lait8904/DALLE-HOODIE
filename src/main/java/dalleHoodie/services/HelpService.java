@@ -1,8 +1,8 @@
-package main.java.dalleHoodie.services;
+package dalleHoodie.services;
 
-import main.java.dalleHoodie.ApplicationContext;
-import main.java.dalleHoodie.CommandList;
-import main.java.dalleHoodie.IService;
+import dalleHoodie.ApplicationContext;
+import dalleHoodie.CommandList;
+import dalleHoodie.IService;
 
 public class HelpService implements IService {
     private final String referenceInformation =
@@ -30,5 +30,9 @@ public class HelpService implements IService {
             return "Error\n";
 
         return referenceInformation;
+    }
+
+    public void someMethod(){
+
     }
 }

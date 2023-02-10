@@ -1,4 +1,4 @@
-package main.java.dalleHoodie.model;
+package dalleHoodie.model;
 
 public class PictureSet {
     private int pictureSetId;

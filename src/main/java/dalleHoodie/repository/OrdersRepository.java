@@ -1,9 +1,9 @@
-package main.java.dalleHoodie.repository;
+package dalleHoodie.repository;
 
-import main.java.dalleHoodie.model.Item;
-import main.java.dalleHoodie.model.Order;
-import main.java.dalleHoodie.model.OrderItem;
-import main.java.dalleHoodie.model.User;
+import dalleHoodie.model.Item;
+import dalleHoodie.model.Order;
+import dalleHoodie.model.OrderItem;
+import dalleHoodie.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;

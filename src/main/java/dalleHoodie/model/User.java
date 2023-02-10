@@ -1,4 +1,4 @@
-package main.java.dalleHoodie.model;
+package dalleHoodie.model;
 import java.sql.Timestamp;
 
 public class User {

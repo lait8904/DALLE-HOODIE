@@ -1,9 +1,9 @@
-package main.java.dalleHoodie.services;
+package dalleHoodie.services;
 
-import main.java.dalleHoodie.ApplicationContext;
-import main.java.dalleHoodie.IService;
-import main.java.dalleHoodie.model.User;
-import main.java.dalleHoodie.repository.UsersRepository;
+import dalleHoodie.ApplicationContext;
+import dalleHoodie.IService;
+import dalleHoodie.model.User;
+import dalleHoodie.repository.UsersRepository;
 
 public class LoginService implements IService {
 

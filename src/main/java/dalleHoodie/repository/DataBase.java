@@ -1,6 +1,6 @@
-package main.java.dalleHoodie.repository;
+package dalleHoodie.repository;
 
-import main.java.dalleHoodie.model.*;
+import dalleHoodie.model.*;
 
 import java.util.ArrayList;
 import java.util.List;

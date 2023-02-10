@@ -1,9 +1,9 @@
-package main.java.dalleHoodie.repository;
+package dalleHoodie.repository;
 
-import main.java.dalleHoodie.model.Item;
-import main.java.dalleHoodie.model.Category;
-import main.java.dalleHoodie.model.Order;
-import main.java.dalleHoodie.model.OrderItem;
+import dalleHoodie.model.Item;
+import dalleHoodie.model.Category;
+import dalleHoodie.model.Order;
+import dalleHoodie.model.OrderItem;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,6 +31,8 @@ public class ItemsRepository{
                 this.setItem(item, resultSet);
                 itemsInCategory.add(item);
             }
+            resultSet.close();
+            statement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

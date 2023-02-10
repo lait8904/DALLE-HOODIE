@@ -1,8 +1,8 @@
-package main.java.dalleHoodie.services;
+package dalleHoodie.services;
 
-import main.java.dalleHoodie.repository.UsersRepository;
-import main.java.dalleHoodie.ApplicationContext;
-import main.java.dalleHoodie.IService;
+import dalleHoodie.repository.UsersRepository;
+import dalleHoodie.ApplicationContext;
+import dalleHoodie.IService;
 
 public class RegisterService implements IService {
     private ApplicationContext applicationContext;

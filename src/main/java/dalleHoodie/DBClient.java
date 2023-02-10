@@ -1,7 +1,12 @@
-package main.java.dalleHoodie;
-import java.sql.*;
+package dalleHoodie;
+import dalleHoodie.repository.OrdersRepository;
 
-public class DBConnectionProvider {
+import java.sql.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+public class DBClient {
     private final String URL = "jdbc:postgresql://localhost/dalle_hoodie";
     private final String USERNAME = "postgres";
     private final String PASSWORD = "postgres";
@@ -11,7 +16,7 @@ public class DBConnectionProvider {
         return connection;
     }
 
-    public DBConnectionProvider(){
+    public DBClient(){
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
@@ -34,5 +39,28 @@ public class DBConnectionProvider {
         } else {
             System.out.println("Failed to make connection to database");
         }
+    }
+
+    public <T> T executeSelect(String sql, Function<ResultSet, T> consumer){
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next())
+                return consumer.apply(resultSet);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+
+
+
+
+    public void executeUpdate(String sql, Function<> preparedStatemnt) {
+
+
+
     }
 }

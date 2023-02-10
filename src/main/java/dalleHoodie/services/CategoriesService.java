@@ -1,9 +1,9 @@
-package main.java.dalleHoodie.services;
+package dalleHoodie.services;
 
-import main.java.dalleHoodie.ApplicationContext;
-import main.java.dalleHoodie.IService;
-import main.java.dalleHoodie.repository.CategoriesRepository;
-import main.java.dalleHoodie.model.Category;
+import dalleHoodie.ApplicationContext;
+import dalleHoodie.IService;
+import dalleHoodie.repository.CategoriesRepository;
+import dalleHoodie.model.Category;
 
 import java.util.List;
 

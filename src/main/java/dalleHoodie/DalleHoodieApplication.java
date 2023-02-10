@@ -1,16 +1,16 @@
-package main.java.dalleHoodie;
+package dalleHoodie;
 
-import main.java.dalleHoodie.repository.*;
-import main.java.dalleHoodie.services.*;
-import java.sql.*;
+import dalleHoodie.repository.*;
+import dalleHoodie.services.*;
 
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Arrays;
 
 public class DalleHoodieApplication {
     public static void main(String[] args) {
 
-        DBConnectionProvider dbConnectionProvider = new DBConnectionProvider();
+        DBClient dbConnectionProvider = new DBClient();
 
         ApplicationContext applicationContext = new ApplicationContext();
         CategoriesRepository categoriesRepository = new CategoriesRepository(
@@ -21,16 +21,20 @@ public class DalleHoodieApplication {
                 dbConnectionProvider.getConnection());
         OrdersRepository ordersRepository = new OrdersRepository(
                 dbConnectionProvider.getConnection());
-        HelpService helpService = new HelpService(applicationContext);
-        CategoriesService categoriesService = new CategoriesService(applicationContext, categoriesRepository);
-        CategoryService categoryService = new CategoryService(applicationContext, itemsRepository);
-        ItemService itemService = new ItemService(applicationContext, itemsRepository);
-        ProfileService profileService = new ProfileService(applicationContext, usersRepository);
-        RegisterService registerService = new RegisterService(applicationContext, usersRepository);
-        LoginService loginService = new LoginService(applicationContext, usersRepository);
-        OrderService orderService = new OrderService(applicationContext, ordersRepository, itemsRepository);
-        OrdersService ordersService = new OrdersService(applicationContext, ordersRepository, itemsRepository);
-        OrderItemService orderItemService = new OrderItemService(applicationContext, ordersRepository, itemsRepository);
+
+
+
+//        IService helpService = new HelpService(applicationContext);
+//        IService categoriesService = new CategoriesService(applicationContext, categoriesRepository);
+//        IService categoryService = new CategoryService(applicationContext, itemsRepository);
+//        IService itemService = new ItemService(applicationContext, itemsRepository);
+//        IService profileService = new ProfileService(applicationContext, usersRepository);
+//        IService registerService = new RegisterService(applicationContext, usersRepository);
+//        IService loginService = new LoginService(applicationContext, usersRepository);
+//        IService orderService = new OrderService(applicationContext, ordersRepository, itemsRepository);
+//        IService ordersService = new OrdersService(applicationContext, ordersRepository, itemsRepository);
+//        IService orderItemService = new OrderItemService(applicationContext, ordersRepository, itemsRepository);
+        Map<String, IService> services = Map.of(CommandList.HELP, new HelpService(applicationContext), );
 
         boolean loop = true;
         Scanner in = new Scanner(System.in);
@@ -40,6 +44,8 @@ public class DalleHoodieApplication {
             String[] words = line.split(" ");
             String cmd = words[0];
             String[] cmd_args = Arrays.copyOfRange(words, 1, words.length);
+            IService service = services.get(cmd);
+            service.perform(cmd_args)
             switch(cmd) {
                 case CommandList.HELP:
                     System.out.print(helpService.perform(cmd_args));

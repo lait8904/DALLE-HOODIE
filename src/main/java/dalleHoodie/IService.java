@@ -1,4 +1,4 @@
-package main.java.dalleHoodie;
+package dalleHoodie;
 
 public interface IService {
     String perform(String[] param);
