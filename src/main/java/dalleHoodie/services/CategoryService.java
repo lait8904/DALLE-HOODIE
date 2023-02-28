@@ -27,7 +27,7 @@ public class CategoryService implements IService {
             int categoryId = Integer.parseInt(param[0]);
             List<Item> items = itemsRepository.getItems(categoryId);
 
-            if (items.size() == 0) {
+            if (items == null || items.size() == 0) {
                 return "No items in this category yet\n";
             }
             String out = "";

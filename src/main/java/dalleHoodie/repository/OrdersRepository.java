@@ -1,5 +1,6 @@
 package dalleHoodie.repository;
 
+import dalleHoodie.DBClient;
 import dalleHoodie.model.Item;
 import dalleHoodie.model.Order;
 import dalleHoodie.model.OrderItem;
@@ -17,31 +18,24 @@ public class OrdersRepository{
         public static final String DELIVERED = "delivered";
     }
 
-    public enum Constants {
-        SUCCESS,
-        NO_USER,
-        NO_ITEM,
-        NO_ORDER,
+    private DBClient dbClient;
+
+    public OrdersRepository(DBClient dbClient) {
+        this.dbClient = dbClient;
     }
 
-    private Connection connection = null;
 
-    public OrdersRepository(Connection connection) {
-        this.connection = connection;
-    }
-
+    /**
+     * @param orderId
+     * @return Order or null
+     */
     public Order getOrder(int orderId) {
-        Order order = new Order();
         String selectOrderSql = "select * from orders";
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectOrderSql);
-            if (resultSet.next()) {
-                this.setOrder(order, resultSet);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Order order = dbClient.executeSelect(selectOrderSql, resultSet -> {
+            Order order_ = new Order();
+            this.setOrder(order_, resultSet);
+            return order_;
+        });
         return order;
     }
 
@@ -53,122 +47,105 @@ public class OrdersRepository{
         order.setPrice(resultSet.getInt("price"));
     }
 
-    public Order createOrder(int userId) {
 
-        try {
-            Statement statement = connection.createStatement();
-            String selectUserSql = "select user_id from users";
-            ResultSet resultSet = statement.executeQuery(selectUserSql);
-            if (!resultSet.next()) {
-                return null;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public Order createOrder(int userId) {
+        String selectUserSql = "select user_id from users";
+        Boolean userExistence = dbClient.executeSelect(selectUserSql, resultSet -> true);
+        if (userExistence == null)
+            return null;
+        //TODO add return description
         Order order = new Order();
         order.setOrderDate(new Timestamp(System.currentTimeMillis()));
         order.setUserId(userId);
         order.setCondition(ConditionList.DRAFT);
-        try {
-            String insertOrderSql = "insert into orders (user_id, condition, order_date, price) " +
-                    "values (?, ?, ?, ?) returning order_id";
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    insertOrderSql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setInt(1, order.getUserId());
-            preparedStatement.setString(2, order.getCondition());
-            preparedStatement.setTimestamp(3, order.getOrderDate());
-            preparedStatement.setInt(4, order.getPrice());
-            preparedStatement.executeUpdate();
-            ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            if (resultSet.next()) {
-                order.setOrderId(resultSet.getInt("order_id"));
-                return order;
-            }
-            return null;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
+        String insertOrderSql = "insert into orders (user_id, condition, order_date, price) " +
+                "values (?, ?, ?, ?) returning order_id";
+
+        order = dbClient.executeUpdate(insertOrderSql, order,
+                (preparedStatement, order_) -> {
+                    preparedStatement.setInt(1, order_.getUserId());
+                    preparedStatement.setString(2, order_.getCondition());
+                    preparedStatement.setTimestamp(3, order_.getOrderDate());
+                    preparedStatement.setInt(4, order_.getPrice());
+                },
+                (resultSet, order_) -> {
+                    order_.setOrderId(resultSet.getInt("order_id"));
+                    return order_;
+                });
+        return order;
     }
 
+    /**
+     * @param userId
+     * @param condition like "draft", "processed", "delivered", etc
+     * @return list of orders or null if they not exist
+     */
     public List<Order> getOrders(int userId, String condition) {
-        List<Order> orders = new ArrayList<Order>();
         String additionalCriteriaSql = "";
         if (condition != null)
             additionalCriteriaSql += " and condition = '" + condition + "'";
         String selectOrdersSql = "select * from orders where user_id = "
                 + userId + additionalCriteriaSql;
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectOrdersSql);
-            while (resultSet.next()) {
+        //TODO all usages are duplicates
+        List<Order> orders = dbClient.executeSelect(selectOrdersSql, resultSet -> {
+            List<Order> orders_ = new ArrayList<>();
+            do {
                 Order order = new Order();
-                order.setOrderId(resultSet.getInt("order_id"));
-                order.setOrderDate(resultSet.getTimestamp("order_date"));
-                order.setCondition(resultSet.getString("condition"));
-                order.setPrice(resultSet.getInt("price"));
-                order.setUserId(resultSet.getInt("user_id"));
-                orders.add(order);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+                this.setOrder(order, resultSet);
+                orders_.add(order);
+            } while (resultSet.next());
+            return orders_;
+        });
+
         return orders;
     }
 
+    /**
+     * @param orderId
+     * @return List of itemId or null if there are no items in order
+     */
     public List<Integer> getItemIds(int orderId) {
-        List<Integer> itemIds = new ArrayList<Integer>();
         String selectItemsSql = "select item_id from order_items where order_id  = "
         + orderId;
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectItemsSql);
-            while (resultSet.next()) {
-                itemIds.add(resultSet.getInt("item_id"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        List<Integer> itemIds = dbClient.executeSelect(selectItemsSql, resultSet -> {
+            List<Integer> itemIds_ = new ArrayList<>();
+            do {
+                itemIds_.add(resultSet.getInt("item_id"));
+            } while (resultSet.next());
+            return itemIds_;
+        });
+
         return itemIds;
     }
 
     public OrderItem addItem(int orderId, int itemId) {
-        Constants err = Constants.NO_ORDER;
         String selectOrderSql = "select order_id from orders";
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectOrderSql);
-            if (resultSet.next())
-                err = Constants.SUCCESS;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        if (err != Constants.SUCCESS)
+
+        Boolean existenceSmth = dbClient.executeSelect(selectOrderSql, resultSet -> true);
+        if (existenceSmth == null)
             return null;
 
-        err = Constants.NO_ITEM;
         String selectItemSql = "select item_id from items";
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectItemSql);
-            if (resultSet.next())
-                err = Constants.SUCCESS;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        if (err != Constants.SUCCESS)
-            return null;
 
+        existenceSmth = dbClient.executeSelect(selectItemSql, resultSet -> true);
+        if (existenceSmth == null)
+                return null;
+        //TODO add return description
         String insertOrderItemsSql = "insert into order_items (order_id, item_id) " +
-                "values (" + orderId + ", " + itemId + ")";
-        try {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(insertOrderItemsSql);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+                "values (?, ?)";
+
         OrderItem orderItem = new OrderItem();
         orderItem.setItemId(itemId);
         orderItem.setOrderId(orderId);
+
+        orderItem = dbClient.executeUpdate(insertOrderItemsSql, orderItem,
+                (preparedStatement, orderItem_) -> {
+                    preparedStatement.setInt(1, orderItem_.getOrderId());
+                    preparedStatement.setInt(2, orderItem_.getItemId());
+                },
+                null);
+
         return orderItem;
     }
 }

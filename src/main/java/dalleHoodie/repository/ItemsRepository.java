@@ -1,5 +1,6 @@
 package dalleHoodie.repository;
 
+import dalleHoodie.DBClient;
 import dalleHoodie.model.Item;
 import dalleHoodie.model.Category;
 import dalleHoodie.model.Order;
@@ -13,45 +14,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemsRepository{
-    private Connection connection = null;
+    private DBClient dbClient;
 
-    public ItemsRepository(Connection connection) {
-        this.connection = connection;
+    public ItemsRepository(DBClient dbClient) {
+        this.dbClient = dbClient;
     }
 
     public List<Item> getItems(int categoryId) {
-        List<Item> itemsInCategory = new ArrayList<Item>();
         String selectItemsSql = "select * from items " +
                 "where category_id = " + categoryId;
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectItemsSql);
-            while(resultSet.next()) {
+
+        List<Item> itemsInCategory = dbClient.executeSelect(selectItemsSql, resultSet -> {
+            List<Item> itemsInCategory_ = new ArrayList<>();
+            do {
                 Item item = new Item();
                 this.setItem(item, resultSet);
-                itemsInCategory.add(item);
-            }
-            resultSet.close();
-            statement.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+                itemsInCategory_.add(item);
+            } while (resultSet.next());
+            return itemsInCategory_;
+        });
         return itemsInCategory;
     }
 
     public Item getItem(int itemId) {
-        Item item = new Item();
         String selectItemSql = "select * from items " +
                 "where item_id = " + itemId;
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectItemSql);
-            if (resultSet.next()) {
-                this.setItem(item, resultSet);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
+        Item item = dbClient.executeSelect(selectItemSql, resultSet -> {
+            Item item_ = new Item();
+            this.setItem(item_, resultSet);
+            return item_;
+        });
+
         return item;
     }
 

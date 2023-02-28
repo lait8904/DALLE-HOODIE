@@ -26,7 +26,7 @@ public class CategoriesService implements IService {
             return "Error (number of parameters)\n";
 
         List<Category> categories = categoriesRepository.getCategories();
-        if (categories.size() == 0)
+        if (categories == null || categories.size() == 0)
             return "No such categories yet";
 
         String out = "";

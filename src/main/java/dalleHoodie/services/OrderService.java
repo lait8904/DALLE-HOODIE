@@ -35,7 +35,7 @@ public class OrderService implements IService {
         List<Order> draftOrders = ordersRepository.getOrders(
                     user.getUserId(), OrdersRepository.ConditionList.DRAFT);
         Order draftOrder = null;
-        if (draftOrders.size() == 0)
+        if (draftOrders == null || draftOrders.size() == 0)
             draftOrder = ordersRepository.createOrder(user.getUserId());
         else
             draftOrder = draftOrders.get(0);
@@ -43,13 +43,14 @@ public class OrderService implements IService {
             return "Error (Authorize?)\n";
 
         List<Integer> itemIds = ordersRepository.getItemIds(draftOrder.getOrderId());
-        if (itemIds.size() == 0)
+        if (itemIds == null || itemIds.size() == 0)
             return "No items in bag yet\n";
         for (Integer itemId : itemIds) {
             Item item = itemsRepository.getItem(itemId);
+            if (item == null)
+                return "Error (Non-existent item in bag)\n";
             out += "\t" + item.getItemName() + "\n";
         }
         return out;
-
     }
 }

@@ -41,7 +41,7 @@ public class OrderItemService implements IService {
             List<Order> draftOrders = ordersRepository.getOrders(
                     user.getUserId(), OrdersRepository.ConditionList.DRAFT);
                 Order draftOrder = null;
-            if (draftOrders.size() == 0)
+            if (draftOrders == null || draftOrders.size() == 0)
                 draftOrder = ordersRepository.createOrder(user.getUserId());
             else
                 draftOrder = draftOrders.get(0);

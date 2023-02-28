@@ -8,6 +8,7 @@ import dalleHoodie.model.User;
 import dalleHoodie.repository.ItemsRepository;
 import dalleHoodie.repository.OrdersRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrdersService implements IService {
@@ -34,8 +35,8 @@ public class OrdersService implements IService {
             return "Authorize firstly!\n";
         List<Order> usersOrders = ordersRepository.getOrders(user.getUserId(), null);
 
-        if (usersOrders.size() == 0)
-            ordersRepository.createOrder(user.getUserId());
+        if (usersOrders == null || usersOrders.size() == 0)
+            usersOrders = List.of(ordersRepository.createOrder(user.getUserId()));
 
         for (Order order : usersOrders) {
             if (order == null) {
@@ -46,14 +47,17 @@ public class OrdersService implements IService {
             out += order.getCondition() + " order from " + order.getOrderDate() + "\n";
 
             List<Integer> itemIds = ordersRepository.getItemIds(order.getOrderId());
-            if (itemIds.size() == 0)
+            if (itemIds == null || itemIds.size() == 0) {
                 out += "\tNo items in order\n";
+                itemIds = new ArrayList<>();
+            }
             for (Integer itemId : itemIds) {
                 Item item = itemsRepository.getItem(itemId);
+                if (item == null)
+                    return "Error (Non-existent item in order from " + order.getOrderDate() + "\n;";
                 out += "\t" + item.getItemName() + "(" + item.getItemId() + ")\n";
             }
         }
-
         return out;
     }
 }
